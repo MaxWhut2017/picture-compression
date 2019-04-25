@@ -1,5 +1,5 @@
 ///Create: 2019-04-25 15:46:54
-///Last Modified: 2019-04-25 16:24:34
+///Last Modified: 2019-04-25 16:42:30
 ///
 #include <cstdio>
 #include <conio.h>
@@ -8,6 +8,7 @@
 #include <queue> 
 #include <stack>
 #include <vector>
+#include <cstring>
 #include <iostream>
 ///接口include
 #include "count.h"
@@ -17,10 +18,11 @@ using namespace std;
 
 void compression_count_test(){
     char filename[256]="C:/Users/Max/Documents/picture-compression/pic/testcnt.bmp";
-    int *weight;
-    weight=get_weight(filename);
-    cout << "Byte " << "Weight";
-    for(int i=0;i<256;i++){
+    int weight[256];
+    memset(weight,0,sizeof(weight));
+    get_weight(weight,filename);
+    cout << "Byte " << "Weight\n";
+    for(int i=0;i<256;i++)if(weight[i]!=0){
         printf("0x%02X( %c ) %d\n",i,i,weight[i]);//使用print.cout的格式控制比较难.
     }
 }

@@ -13,21 +13,21 @@
 #include <stack>
 #include <vector>
 #include <iostream>
+#include <cstring>
 using namespace std;
 
-int* get_weight(char* filename){
+void get_weight(int* weight,char* filename){
 ///    保存256个字节分别的权重的权重数组
-    int *weight=(int *)malloc(256);//一开始都是0
 ///    以只读二进制格式打开文件
     FILE *in=fopen(filename,"rb");
 ///    while循环扫描文件,初始化权重数组
     char ch;
-    while(ch=getc(in)!=EOF){
+    //ch=getc(in)一定要用括号括起来以后判断!=EOF,常见的错误写法ch=getc(in)!=EOF实际上在读到文件末尾前始终等价于ch=0.别问我怎么知道的.
+    while((ch=getc(in))!=EOF){
         weight[ch]++;
     }
 ///    用完随手关
     fclose(in);
-	return weight;
 }
 
 void savefile(){
