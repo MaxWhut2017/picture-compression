@@ -1,5 +1,5 @@
 ///Create: 2019-04-25 15:46:54
-///Last Modified: 2019-04-27 20:31:11
+///Last Modified: 2019-04-27 22:36:29
 ///
 #include <cstdio>
 #include <conio.h>
@@ -13,6 +13,7 @@
 ///接口include
 #include "count.h"
 #include "com.h"
+#include "huffman.h"
 ///压缩接口测试:输出其返回的权重数组
 ///
 using namespace std;
@@ -33,9 +34,12 @@ void compression_com_test(){
     int len=17;
     bit2zip(bit,len,filename);
 }
+int bit[1000000];
 int main(){
 ///    compression_count_test();
-    compression_com_test();
+///    compression_com_test();
+    int weight[]={5,4,3,2,2,1};
+    huf(weight,6,bit);
 	return 0;
 }
 
