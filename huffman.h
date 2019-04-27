@@ -51,6 +51,7 @@ void find_min_2(int* cur,int len){
     vis[cur[0]]=vis[cur[1]]=true;
 }
 void test_print_tree(node* temp_root,string str="$"){
+    cout << temp_root->freq << "\n";
     if(temp_root->value!=-1){
         cout << temp_root->value << ": " << str << endl;
         return;
@@ -64,7 +65,7 @@ void test_print_tree(node* temp_root,string str="$"){
 }
 void print(){
     for(int i=0;i<new_node_cnt;i++){
-        cout << n[i].value << " " << n[i].freq << "\n";
+        cout << i << " " << n[i].value << " " << n[i].freq << "\n";
     }
 }
 void huf(int* weight,int len,int* bit){
@@ -80,7 +81,7 @@ void huf(int* weight,int len,int* bit){
         vis[cur[0]]=vis[cur[1]]=true;
         tree_build(&n[cur[0]],&n[cur[1]]);
     }
-    int root=2*len-1;//256+255-1
+    int root=2*len-2;//256+256-1-1
     //测一下生成的树是否正确
     print();
     test_print_tree(&n[root]);
