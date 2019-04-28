@@ -23,7 +23,7 @@ struct node{
 node n[512];
 bool vis[512];
 int new_node_cnt;
-void tree_build(node* a,node* b){//节点(子树)合并,返回新树根
+void tree_merge(node* a,node* b){//节点(子树)合并,返回新树根
     n[new_node_cnt].left_child=a;
     n[new_node_cnt].right_child=b;
     a->father=b->father=&n[new_node_cnt];
@@ -49,18 +49,25 @@ void find_min_2(int* cur,int len){
     cur[0]=min1_cur;
     cur[1]=min2_cur;
     vis[cur[0]]=vis[cur[1]]=true;
+    if(min1>min2){
+        swap(cur[0],cur[1]);
+    }
 }
-void test_print_tree(node* temp_root,string str="$"){
-    cout << temp_root->freq << "\n";
+//这个函数本来是用来先根法输出树测试用的,后来改一下用来拿到huffman_code数组
+string huffman_code[256];
+void tree_origin(node* temp_root,string str="$"){
     if(temp_root->value!=-1){
-        cout << temp_root->value << ": " << str << endl;
+///        printf("%d(%c): ",temp_root->value,temp_root->value);\
+///        cout << str << endl;
+///        cout << temp_root->value << ": " << str << endl;
+        huffman_code[temp_root->value]=str;
         return;
     }
     if(temp_root->left_child){
-        test_print_tree(temp_root->left_child,str+"0");
+        tree_origin(temp_root->left_child,str+"0");
     }
     if(temp_root->right_child){
-        test_print_tree(temp_root->right_child,str+"1");
+        tree_origin(temp_root->right_child,str+"1");
     }
 }
 void print(){
@@ -68,7 +75,7 @@ void print(){
         cout << i << " " << n[i].value << " " << n[i].freq << "\n";
     }
 }
-void huf(int* weight,int len,int* bit){
+void tree_build(int* weight,int len){
     new_node_cnt=len;
     memset(vis,false,sizeof(vis));
     for(int i=0;i<len;i++){
@@ -79,15 +86,37 @@ void huf(int* weight,int len,int* bit){
         int cur[2];
         find_min_2(cur,len);
         vis[cur[0]]=vis[cur[1]]=true;
-        tree_build(&n[cur[0]],&n[cur[1]]);
+        tree_merge(&n[cur[0]],&n[cur[1]]);
     }
     int root=2*len-2;//256+256-1-1
     //测一下生成的树是否正确
-    print();
-    test_print_tree(&n[root]);
-///    哈夫曼树初始化完毕,开始生成01串
-    
+///    print();
+    tree_origin(&n[root]);
 }
+void trans(char* filename,int* bit,int& len){
+///    哈夫曼树初始化完毕,开始生成01串
+    FILE* in=fopen(filename,"rb");
+    int cur=0;
+    char ch;
+    while((ch=getc(in))!=EOF){
+        string temp=huffman_code[ch];
+        for(int i=1;i<temp.size();i++){
+            bit[cur++]=temp[i]-'0';
+        }
+    }
+    len=cur;
+///    for(int i=0;i<cur;i++){
+///        printf("%d",bit[i]);
+///    }
+    fclose(in);
+}
+void huffman(char* filename,int* weight,int weightlen,int* bit,int& bitlen){
+    tree_build(weight,weightlen);
+    trans(filename,bit,bitlen);
+}
+    
+    
+
 
 
 
